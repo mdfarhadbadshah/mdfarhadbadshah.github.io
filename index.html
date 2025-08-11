@@ -4,6 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farhad's Portfolio</title>
+    <style>
+        /* This CSS code ensures images are responsive */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* This CSS code will apply only on screens smaller than 600px */
+        @media (max-width: 600px) {
+            header nav {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            header nav ul {
+                flex-direction: column;
+                padding-top: 10px;
+            }
+            header nav ul li {
+                margin: 5px 0;
+            }
+        }
+    </style>
 </head>
 <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; background-color: #f4f4f4; color: #333;">
 
@@ -19,7 +42,7 @@
         </nav>
     </header>
 
-    <section id="hero" style="background: #50a3a2; color: #fff; text-align: center; padding: 150px 20px; height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <section id="hero" style="background: #50a3a2; color: #fff; text-align: center; padding: 150px 20px; height: 60vh; display: flex; justify-content: center; align-items: center;">
         <div class="hero-content">
             <h2 style="font-size: 2em; margin-bottom: 10px;">Welcome, I am Farhad.</h2>
             <p style="font-size: 1.2em;">A science student who loves to learn and create new things.</p>
@@ -30,7 +53,7 @@
         <div style="max-width: 960px; margin: auto; padding: 0 20px;">
             <h2 style="text-align: center; margin-bottom: 20px;">About Me</h2>
             <p style="text-align: center;">After completing my HSC, my main goal is to expand my knowledge in various fields of science and technology. I am particularly interested in programming and data analysis. In this portfolio, I am showcasing some of my interests and small projects.</p>
-            <img src="your-photo.jpg" alt="Farhad's Photo" style="display: block; width: 150px; height: 150px; border-radius: 50%; margin: 20px auto; object-fit: cover;">
+            <img src="your-photo.jpg" alt="Farhad's Photo" style="width: 150px; height: 150px; border-radius: 50%; margin: 20px auto; object-fit: cover;">
         </div>
     </section>
 
@@ -74,26 +97,25 @@
         <p>&copy; 2024 Farhad. All rights reserved.</p>
     </footer>
     
-  <script>
-    // Get the header
-    var header = document.getElementById("myHeader");
+    <script>
+        // Get the header
+        var header = document.getElementById("myHeader");
 
-    // The header will stick after scrolling 80 pixels
-    var sticky = 80;
+        // The header will stick after scrolling 80 pixels
+        var sticky = 80;
 
-    // When the user scrolls the page, execute the function
-    window.onscroll = function() {
-        // Check if the current scroll position is greater than the sticky value
-        if (window.pageYOffset > sticky) {
-            // If it is, make the header sticky
-            header.style.position = "fixed";
-            header.style.top = "0";
-        } else {
-            // Otherwise, keep it as static
-            header.style.position = "static";
-        }
-    };
-</script>
+        // When the user scrolls the page, execute the function
+        window.onscroll = function() {
+            // Check if the current scroll position is greater than the sticky value
+            if (window.pageYOffset > sticky) {
+                // If it is, make the header sticky
+                header.style.position = "fixed";
+                header.style.top = "0";
+            } else {
+                // Otherwise, keep it as static
+                header.style.position = "static";
+            }
+        };
+    </script>
 </body>
 </html>
-
