@@ -7,7 +7,7 @@
 </head>
 <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; background-color: #f4f4f4; color: #333;">
 
-    <header style="background: #333; color: #fff; padding: 1rem 0; position: sticky; top: 0; width: 100%; z-index: 1000;">
+    <header id="myHeader" style="background: #333; color: #fff; padding: 1rem 0; width: 100%; z-index: 1000;">
         <nav style="display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: auto; padding: 0 20px;">
             <h1 style="margin: 0;">Farhad</h1>
             <ul style="list-style: none; margin: 0; padding: 0; display: flex;">
@@ -74,5 +74,25 @@
         <p>&copy; 2024 Farhad. All rights reserved.</p>
     </footer>
     
+    <script>
+        // Get the header
+        var header = document.getElementById("myHeader");
+
+        // Get the initial position of the header
+        var sticky = header.offsetTop;
+
+        // When the user scrolls the page, execute myFunction
+        window.onscroll = function() {
+            // Check if the current scroll position is greater than the header's initial position
+            if (window.pageYOffset > sticky) {
+                // If it is, make the header sticky
+                header.style.position = "fixed";
+                header.style.top = "0";
+            } else {
+                // Otherwise, keep it as static
+                header.style.position = "static";
+            }
+        };
+    </script>
 </body>
 </html>
