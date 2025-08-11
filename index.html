@@ -74,25 +74,26 @@
         <p>&copy; 2024 Farhad. All rights reserved.</p>
     </footer>
     
-    <script>
-        // Get the header
-        var header = document.getElementById("myHeader");
+  <script>
+    // Get the header
+    var header = document.getElementById("myHeader");
 
-        // Get the initial position of the header
-        var sticky = header.offsetTop;
+    // The header will stick after scrolling 80 pixels
+    var sticky = 80;
 
-        // When the user scrolls the page, execute myFunction
-        window.onscroll = function() {
-            // Check if the current scroll position is greater than the header's initial position
-            if (window.pageYOffset > sticky) {
-                // If it is, make the header sticky
-                header.style.position = "fixed";
-                header.style.top = "0";
-            } else {
-                // Otherwise, keep it as static
-                header.style.position = "static";
-            }
-        };
-    </script>
+    // When the user scrolls the page, execute the function
+    window.onscroll = function() {
+        // Check if the current scroll position is greater than the sticky value
+        if (window.pageYOffset > sticky) {
+            // If it is, make the header sticky
+            header.style.position = "fixed";
+            header.style.top = "0";
+        } else {
+            // Otherwise, keep it as static
+            header.style.position = "static";
+        }
+    };
+</script>
 </body>
 </html>
+
