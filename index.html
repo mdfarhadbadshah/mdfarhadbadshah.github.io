@@ -4,118 +4,745 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farhad's Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@800;900&display=swap" rel="stylesheet">
     <style>
-        /* This CSS code ensures images are responsive */
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #f093fb;
+            --light: #ffffff;
+            --dark: #1a1a2e;
+            --gray: #f4f4f4;
+            --text: #333;
         }
-        /* This CSS code will apply only on screens smaller than 600px */
-        @media (max-width: 600px) {
-            header nav {
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        header.scrolled {
+            padding: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--light);
+            z-index: 2;
+            position: relative;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero-content h2 {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--light);
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: var(--accent);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        /* About Section */
+        #about {
+            background: linear-gradient(to bottom, #f5f7fa 0%, #e4e8f0 100%);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .about-image img {
+            width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border: 5px solid white;
+            transition: transform 0.5s ease;
+        }
+
+        .about-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .about-text {
+            flex: 2;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .about-text .highlight {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Projects Section */
+        #projects {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .project-content {
+            padding: 25px;
+        }
+
+        .project-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .project-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .project-link {
+            display: inline-block;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        .project-link i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .project-link:hover i {
+            transform: translateX(3px);
+        }
+
+        /* Skills Section */
+        #skills {
+            background: linear-gradient(to bottom, #e4e8f0 0%, #f5f7fa 100%);
+        }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .skill-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .skill-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .skill-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-item i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        /* Contact Section */
+        #contact {
+            background: linear-gradient(135deg, #8ec5fc 0%, #e0c3fc 100%);
+        }
+
+        .contact-content {
+            text-align: center;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        .contact-content p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            color: #444;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: var(--primary);
+        }
+
+        .contact-item a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--light);
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .social-links {
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            color: var(--light);
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .about-content {
+                flex-direction: column;
+            }
+
+            .about-image {
+                order: 2;
+            }
+
+            .about-text {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 15px;
+            }
+
+            nav ul li {
+                margin: 0 10px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
                 flex-direction: column;
                 align-items: center;
-                text-align: center;
             }
-            header nav ul {
-                flex-direction: column;
-                padding-top: 10px;
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
             }
-            header nav ul li {
-                margin: 5px 0; /* Changed this line to add spacing */
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .skill-item {
+                padding: 15px 20px;
             }
         }
     </style>
 </head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; background-color: #f4f4f4; color: #333;">
-
-    <header id="myHeader" style="background: #333; color: #fff; padding: 1rem 0; width: 100%; z-index: 1000;">
-        <nav style="display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: auto; padding: 0 20px;">
-            <h1 style="margin: 0;">Farhad</h1>
-            <ul style="list-style: none; margin: 0; padding: 0; display: flex;">
-                <li style="margin-left: 20px;"><a style="color: #fff; text-decoration: none; font-weight: bold;" href="#about">About Me</a></li>
-                <li style="margin-left: 20px;"><a style="color: #fff; text-decoration: none; font-weight: bold;" href="#projects">Projects</a></li>
-                <li style="margin-left: 20px;"><a style="color: #fff; text-decoration: none; font-weight: bold;" href="#skills">Skills</a></li>
-                <li style="margin-left: 20px;"><a style="color: #fff; text-decoration: none; font-weight: bold;" href="#contact">Contact</a></li>
+<body>
+    <!-- Header -->
+    <header id="myHeader">
+        <nav>
+            <a href="#" class="logo">FARHAD</a>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <section id="hero" style="background: #50a3a2; color: #fff; text-align: center; padding: 150px 20px; height: 60vh; display: flex; justify-content: center; align-items: center;">
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="particles" id="particles"></div>
         <div class="hero-content">
-            <h2 style="font-size: 2em; margin-bottom: 10px;">Welcome, I am Farhad.</h2>
-            <p style="font-size: 1.2em;">A science student who loves to learn and create new things.</p>
+            <h1>Farhad</h1>
+            <h2>Science Student & Creative Thinker</h2>
+            <a href="#about" class="cta-button">Discover My Work</a>
         </div>
     </section>
 
-    <section id="about" style="padding: 80px 0;">
-        <div style="max-width: 960px; margin: auto; padding: 0 20px;">
-            <h2 style="text-align: center; margin-bottom: 20px;">About Me</h2>
-            <p style="text-align: center;">After completing my HSC, my main goal is to expand my knowledge in various fields of science and technology. I am particularly interested in programming and data analysis. In this portfolio, I am showcasing some of my interests and small projects.</p>
-            <img src="your-photo.jpg" alt="Farhad's Photo" style="width: 150px; height: 150px; border-radius: 50%; margin: 20px auto; object-fit: cover;">
-        </div>
-    </section>
-
-    <section id="projects" style="padding: 80px 0; background-color: #e2e2e2;">
-        <div style="max-width: 960px; margin: auto; padding: 0 20px;">
-            <h2 style="text-align: center; margin-bottom: 20px;">Projects</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                <div style="background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <h3>Project 1: Solar Energy Model</h3>
-                    <p>I built a solar energy model for a school science fair that could power a small fan. Through this project, I learned a lot about renewable energy.</p>
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Farhad's Photo">
                 </div>
-                <div style="background: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                    <h3>Project 2: Basic Calculator</h3>
-                    <p>I created a simple calculator using Python. This project helped me understand the fundamental concepts of coding.</p>
+                <div class="about-text">
+                    <p>Hello! I'm <span class="highlight">Farhad</span>, a passionate science student with a curiosity for exploring the intersection of science and technology.</p>
+                    <p>After completing my HSC, I've dedicated myself to expanding my knowledge in various scientific fields, with a particular interest in <span class="highlight">programming</span> and <span class="highlight">data analysis</span>.</p>
+                    <p>I believe in the power of continuous learning and enjoy tackling challenges that push my boundaries. This portfolio showcases some of my interests and projects that reflect my journey in science and technology.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="skills" style="padding: 80px 0;">
-        <div style="max-width: 960px; margin: auto; padding: 0 20px;">
-            <h2 style="text-align: center; margin-bottom: 20px;">Skills</h2>
-            <ul style="list-style-type: none; padding: 0; text-align: center;">
-                <li style="background: #50a3a2; color: #fff; display: inline-block; margin: 5px; padding: 10px 15px; border-radius: 20px;">Physics, Chemistry, Mathematics</li>
-                <li style="background: #50a3a2; color: #fff; display: inline-block; margin: 5px; padding: 10px 15px; border-radius: 20px;">Basic Programming (Python)</li>
-                <li style="background: #50a3a2; color: #fff; display: inline-block; margin: 5px; padding: 10px 15px; border-radius: 20px;">Microsoft Office Suite</li>
-                <li style="background: #50a3a2; color: #fff; display: inline-block; margin: 5px; padding: 10px 15px; border-radius: 20px;">Problem-Solving Skills</li>
-            </ul>
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">My Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-solar-panel"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Solar Energy Model</h3>
+                        <p>I built a solar energy model for a school science fair that could power a small fan. Through this project, I learned about renewable energy principles and practical applications.</p>
+                        <a href="#" class="project-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Python Calculator</h3>
+                        <p>I created a simple calculator using Python. This project helped me understand fundamental programming concepts and problem-solving approaches in coding.</p>
+                        <a href="#" class="project-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Data Analysis Project</h3>
+                        <p>Analyzed scientific data using Python libraries to visualize trends and patterns. This project enhanced my analytical skills and understanding of data interpretation.</p>
+                        <a href="#" class="project-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section id="contact" style="padding: 80px 0; background-color: #e2e2e2;">
-        <div style="max-width: 960px; margin: auto; padding: 0 20px;">
-            <h2 style="text-align: center; margin-bottom: 20px;">Contact</h2>
-            <p>If you wish to contact me, you can email me at the address below.</p>
-            <p>Email: <a href="mailto:your.email@example.com">your.email@example.com</a></p>
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div class="skills-container">
+                <div class="skill-item">
+                    <i class="fas fa-atom"></i> Physics
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-flask"></i> Chemistry
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-square-root-alt"></i> Mathematics
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-code"></i> Python Programming
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-chart-bar"></i> Data Analysis
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-file-excel"></i> Microsoft Office
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-lightbulb"></i> Problem Solving
+                </div>
+                <div class="skill-item">
+                    <i class="fas fa-microscope"></i> Research
+                </div>
+            </div>
         </div>
     </section>
 
-    <footer style="text-align: center; padding: 20px 0; background: #333; color: #fff;">
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <p>If you have any questions or would like to collaborate on a project, feel free to reach out to me. I'm always open to discussing new opportunities and interesting ideas.</p>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:farhad@example.com">farhad@example.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <a href="tel:+1234567890">+1 (234) 567-890</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
         <p>&copy; 2024 Farhad. All rights reserved.</p>
     </footer>
-    
+
     <script>
-        // Get the header
-        var header = document.getElementById("myHeader");
-
-        // The header will stick after scrolling 80 pixels
-        var sticky = 80;
-
-        // When the user scrolls the page, execute the function
-        window.onscroll = function() {
-            // Check if the current scroll position is greater than the sticky value
-            if (window.pageYOffset > sticky) {
-                // If it is, make the header sticky
-                header.style.position = "fixed";
-                header.style.top = "0";
+        // Sticky header
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('myHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
             } else {
-                // Otherwise, keep it as static
-                header.style.position = "static";
+                header.classList.remove('scrolled');
             }
-        };
+        });
+
+        // Particle animation for hero section
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 5px and 15px
+                const size = Math.random() * 10 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration between 10s and 20s
+                const duration = Math.random() * 10 + 10;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        });
     </script>
 </body>
 </html>
