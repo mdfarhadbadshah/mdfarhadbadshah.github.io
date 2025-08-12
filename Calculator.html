@@ -413,6 +413,71 @@
             flex: 2;
         }
 
+        /* IELTS Calculator Specific Styles */
+        .ielts-inputs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .ielts-result {
+            background: #f0f0f0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-top: 15px;
+        }
+
+        .band-score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .band-score .score {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Unit Converter Specific Styles */
+        .unit-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .unit-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .unit-row select, .unit-row input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        .unit-row select {
+            flex: 1;
+        }
+
+        .unit-row input {
+            flex: 2;
+        }
+
         /* Footer */
         footer {
             background: var(--dark);
@@ -440,6 +505,10 @@
             }
 
             .calculators-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ielts-inputs {
                 grid-template-columns: 1fr;
             }
         }
@@ -556,6 +625,12 @@
                             <button class="calc-btn" onclick="appendToScientificDisplay('6')">6</button>
                             <button class="calc-btn operator" onclick="appendToScientificDisplay('e')">e</button>
                             <button class="calc-btn equals" onclick="calculateScientific()">=</button>
+                            
+                            <button class="calc-btn" onclick="appendToScientificDisplay('1')">1</button>
+                            <button class="calc-btn" onclick="appendToScientificDisplay('2')">2</button>
+                            <button class="calc-btn" onclick="appendToScientificDisplay('3')">3</button>
+                            <button class="calc-btn operator" onclick="appendToScientificDisplay('!')">!</button>
+                            <button class="calc-btn operator" onclick="appendToScientificDisplay('%')">%</button>
                         </div>
                     </div>
                 </div>
@@ -662,6 +737,81 @@
                             <button class="calc-btn equals" onclick="calculateLoan()">Calculate</button>
                         </div>
                         <div class="bmi-result" id="loan-result">Monthly payment will appear here</div>
+                    </div>
+                </div>
+
+                <!-- IELTS Band Score Calculator -->
+                <div class="calculator-card">
+                    <div class="calculator-header">
+                        <h3><i class="fas fa-graduation-cap"></i> IELTS Band Score Calculator</h3>
+                        <p>Calculate your overall IELTS band score</p>
+                    </div>
+                    <div class="calculator-body">
+                        <div class="ielts-inputs">
+                            <div class="input-group">
+                                <label for="listening">Listening (0-9):</label>
+                                <input type="number" id="listening" min="0" max="9" step="0.5" placeholder="Enter score">
+                            </div>
+                            <div class="input-group">
+                                <label for="reading">Reading (0-9):</label>
+                                <input type="number" id="reading" min="0" max="9" step="0.5" placeholder="Enter score">
+                            </div>
+                            <div class="input-group">
+                                <label for="writing">Writing (0-9):</label>
+                                <input type="number" id="writing" min="0" max="9" step="0.5" placeholder="Enter score">
+                            </div>
+                            <div class="input-group">
+                                <label for="speaking">Speaking (0-9):</label>
+                                <input type="number" id="speaking" min="0" max="9" step="0.5" placeholder="Enter score">
+                            </div>
+                            <button class="calc-btn equals" onclick="calculateIELTS()">Calculate Band Score</button>
+                        </div>
+                        <div class="ielts-result" id="ielts-result">
+                            Your overall band score will appear here
+                            <div class="band-score">
+                                <span>Overall Band Score:</span>
+                                <span class="score" id="ielts-score">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit Converter -->
+                <div class="calculator-card">
+                    <div class="calculator-header">
+                        <h3><i class="fas fa-ruler"></i> Unit Converter</h3>
+                        <p>Convert between different units of length</p>
+                    </div>
+                    <div class="calculator-body">
+                        <div class="unit-inputs">
+                            <div class="unit-row">
+                                <select id="from-unit">
+                                    <option value="mm">Millimeter (mm)</option>
+                                    <option value="cm">Centimeter (cm)</option>
+                                    <option value="m">Meter (m)</option>
+                                    <option value="km">Kilometer (km)</option>
+                                    <option value="in">Inch (in)</option>
+                                    <option value="ft">Foot (ft)</option>
+                                    <option value="yd">Yard (yd)</option>
+                                    <option value="mi">Mile (mi)</option>
+                                </select>
+                                <input type="number" id="from-value" placeholder="Enter value">
+                            </div>
+                            <div class="unit-row">
+                                <select id="to-unit">
+                                    <option value="mm">Millimeter (mm)</option>
+                                    <option value="cm" selected>Centimeter (cm)</option>
+                                    <option value="m">Meter (m)</option>
+                                    <option value="km">Kilometer (km)</option>
+                                    <option value="in">Inch (in)</option>
+                                    <option value="ft">Foot (ft)</option>
+                                    <option value="yd">Yard (yd)</option>
+                                    <option value="mi">Mile (mi)</option>
+                                </select>
+                                <input type="number" id="to-value" placeholder="Converted value" readonly>
+                            </div>
+                            <button class="calc-btn equals" onclick="convertUnit()">Convert</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -804,7 +954,9 @@
                     .replace(/log/g, 'Math.log10')
                     .replace(/ln/g, 'Math.log')
                     .replace(/sqrt/g, 'Math.sqrt')
-                    .replace(/\^/g, '**');
+                    .replace(/\^/g, '**')
+                    .replace(/!/g, 'factorial')
+                    .replace(/%/g, '/100');
                 
                 scientificInput = String(eval(expression));
                 updateScientificDisplay();
@@ -816,6 +968,14 @@
                     updateScientificDisplay();
                 }, 1500);
             }
+        }
+
+        // Factorial function for scientific calculator
+        function factorial(n) {
+            if (n === 0 || n === 1) {
+                return 1;
+            }
+            return n * factorial(n - 1);
         }
 
         // BMI Calculator Functions
@@ -913,6 +1073,141 @@
                                   (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
             
             resultElement.textContent = `Monthly Payment: $${monthlyPayment.toFixed(2)}`;
+        }
+
+        // IELTS Band Score Calculator Functions
+        function calculateIELTS() {
+            const listening = parseFloat(document.getElementById('listening').value);
+            const reading = parseFloat(document.getElementById('reading').value);
+            const writing = parseFloat(document.getElementById('writing').value);
+            const speaking = parseFloat(document.getElementById('speaking').value);
+            const resultElement = document.getElementById('ielts-result');
+            const scoreElement = document.getElementById('ielts-score');
+            
+            if (isNaN(listening) || isNaN(reading) || isNaN(writing) || isNaN(speaking) ||
+                listening < 0 || listening > 9 || reading < 0 || reading > 9 ||
+                writing < 0 || writing > 9 || speaking < 0 || speaking > 9) {
+                resultElement.innerHTML = 'Please enter valid scores (0-9)';
+                scoreElement.textContent = '-';
+                return;
+            }
+            
+            // Calculate overall band score (average of four modules)
+            const total = listening + reading + writing + speaking;
+            let average = total / 4;
+            
+            // Round to nearest 0.5
+            const roundedAverage = Math.round(average * 2) / 2;
+            
+            scoreElement.textContent = roundedAverage.toFixed(1);
+            
+            // Determine band description
+            let description = '';
+            if (roundedAverage >= 9) {
+                description = 'Expert user';
+            } else if (roundedAverage >= 8) {
+                description = 'Very good user';
+            } else if (roundedAverage >= 7) {
+                description = 'Good user';
+            } else if (roundedAverage >= 6) {
+                description = 'Competent user';
+            } else if (roundedAverage >= 5) {
+                description = 'Modest user';
+            } else if (roundedAverage >= 4) {
+                description = 'Limited user';
+            } else if (roundedAverage >= 3) {
+                description = 'Extremely limited user';
+            } else if (roundedAverage >= 2) {
+                description = 'Intermittent user';
+            } else {
+                description = 'Non user';
+            }
+            
+            resultElement.innerHTML = `
+                Your overall band score will appear here
+                <div class="band-score">
+                    <span>Overall Band Score:</span>
+                    <span class="score">${roundedAverage.toFixed(1)}</span>
+                </div>
+                <p style="margin-top: 10px; font-size: 1rem; color: #555;">${description}</p>
+            `;
+        }
+
+        // Unit Converter Functions
+        function convertUnit() {
+            const fromUnit = document.getElementById('from-unit').value;
+            const toUnit = document.getElementById('to-unit').value;
+            const value = parseFloat(document.getElementById('from-value').value);
+            const resultElement = document.getElementById('to-value');
+            
+            if (isNaN(value)) {
+                resultElement.value = 'Please enter a valid value';
+                return;
+            }
+            
+            // Convert to meters first
+            let valueInMeters;
+            switch (fromUnit) {
+                case 'mm':
+                    valueInMeters = value / 1000;
+                    break;
+                case 'cm':
+                    valueInMeters = value / 100;
+                    break;
+                case 'm':
+                    valueInMeters = value;
+                    break;
+                case 'km':
+                    valueInMeters = value * 1000;
+                    break;
+                case 'in':
+                    valueInMeters = value * 0.0254;
+                    break;
+                case 'ft':
+                    valueInMeters = value * 0.3048;
+                    break;
+                case 'yd':
+                    valueInMeters = value * 0.9144;
+                    break;
+                case 'mi':
+                    valueInMeters = value * 1609.34;
+                    break;
+                default:
+                    valueInMeters = value;
+            }
+            
+            // Convert from meters to target unit
+            let convertedValue;
+            switch (toUnit) {
+                case 'mm':
+                    convertedValue = valueInMeters * 1000;
+                    break;
+                case 'cm':
+                    convertedValue = valueInMeters * 100;
+                    break;
+                case 'm':
+                    convertedValue = valueInMeters;
+                    break;
+                case 'km':
+                    convertedValue = valueInMeters / 1000;
+                    break;
+                case 'in':
+                    convertedValue = valueInMeters / 0.0254;
+                    break;
+                case 'ft':
+                    convertedValue = valueInMeters / 0.3048;
+                    break;
+                case 'yd':
+                    convertedValue = valueInMeters / 0.9144;
+                    break;
+                case 'mi':
+                    convertedValue = valueInMeters / 1609.34;
+                    break;
+                default:
+                    convertedValue = valueInMeters;
+            }
+            
+            resultElement.value = convertedValue.toFixed(6);
         }
     </script>
 </body>
