@@ -17,7 +17,7 @@ addwordform.addEventListener('submit', async (e) => {
     const originalWord = originalWordInput.value;
     const synonym = synonymWordInput.value;
     const sentence = sentenceInput.value;
-
+console.log('Sending data:', originalWord, synonym, sentence); // এই লাইনটি এখানে যোগ করো
     try {
         await addDoc(collection(db, "words"), {
             originalWord: originalWord,
