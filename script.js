@@ -4,14 +4,14 @@ import { db } from './firebase-config.js';
 import { collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
 // HTML এলিমেন্টগুলো সিলেক্ট করো
-const addWordForm = document.getElementById('addwordform');
+const addwordform = document.getElementById('addwordform');
 const originalWordInput = document.getElementById('originalword');
 const synonymWordInput = document.getElementById('synonymword');
 const sentenceInput = document.getElementById('sentence');
 const wordListContainer = document.getElementById('vocabularylist');
 
 // নতুন শব্দ ডেটাবেসে যোগ করার জন্য
-addWordForm.addEventListener('submit', async (e) => {
+addwordform.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const originalWord = originalWordInput.value;
@@ -24,7 +24,7 @@ addWordForm.addEventListener('submit', async (e) => {
             synonym: synonym,
             sentence: sentence
         });
-        addWordForm.reset();
+        addwordform.reset();
         console.log("Word successfully added!");
     } catch (e) {
         console.error("Error adding document: ", e);
