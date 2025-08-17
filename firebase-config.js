@@ -4,10 +4,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/fireba
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  apiKey: "AIzaSyCjmvASQ84ma8FwpBWhLDEQ-dSJmDlLzpQ",
+  authDomain: "farhad-vocabs.firebaseapp.com",
+  projectId: "farhad-vocabs",
+  storageBucket: "farhad-vocabs.appspot.com",
   messagingSenderId: "...",
   appId: "..."
 };
