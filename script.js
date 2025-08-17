@@ -60,7 +60,7 @@ addwordform.addEventListener('submit', async (e) => {
 });
 
 // Firebase থেকে রিয়েল-টাইম ডেটা লোড করা এবং সার্চ ফাংশন
-onSnapshot(collection(db, "words"), (snapshot) => {
+onSnapshot(query(collection(db, "words"), orderBy("createdAt", "desc")), (snapshot) => {
     const allWords = snapshot.docs.map(doc => doc.data());
     let filteredWords = allWords;
 
