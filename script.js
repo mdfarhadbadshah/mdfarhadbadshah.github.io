@@ -3,8 +3,9 @@ import { collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebase
 
 // HTML এলিমেন্টগুলো সিলেক্ট করা
 const addwordform = document.getElementById('addwordform');
-const originalWordInput = document.getElementById('originalWord');
-const synonymWordInput = document.getElementById('synonymWord');
+// সঠিক কোড
+const originalWordInput = document.getElementById('originalword');
+const synonymWordInput = document.getElementById('synonymword');
 const sentenceInput = document.getElementById('sentence');
 const wordListContainer = document.getElementById('vocabularyList');
 const searchInput = document.getElementById('searchInput');
