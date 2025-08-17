@@ -1,14 +1,38 @@
-// script.js
-
-import { db } from './firebase-config.js'; 
+import { db } from './firebase-config.js';
 import { collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
-// HTML এলিমেন্টগুলো সিলেক্ট করো
+// HTML এলিমেন্টগুলো সিলেক্ট করা
 const addwordform = document.getElementById('addwordform');
 const originalWordInput = document.getElementById('originalWord');
 const synonymWordInput = document.getElementById('synonymWord');
 const sentenceInput = document.getElementById('sentence');
-const wordListContainer = document.getElementById('vocabularylist');
+const wordListContainer = document.getElementById('vocabularyList');
+const searchInput = document.getElementById('searchInput');
+
+// শব্দগুলো রিয়েল-টাইমে দেখানোর ফাংশন
+function renderVocabularyList(words) {
+    wordListContainer.innerHTML = '';
+    if (words.length === 0) {
+        wordListContainer.innerHTML = '<p class="no-words-message">কোনো শব্দ পাওয়া যায়নি।</p>';
+        return;
+    }
+    words.forEach((wordData, index) => {
+        const card = `
+            <div class="project-card">
+                <div class="project-image">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="project-content">
+                    <h3 class="word-original">${wordData.originalWord}</h3>
+                    <p class="word-synonym">${wordData.synonym}</p>
+                    <p class="word-sentence">${wordData.sentence}</p>
+                </div>
+                <span class="word-number">${index + 1}</span>
+            </div>
+        `;
+        wordListContainer.innerHTML += card;
+    });
+}
 
 // নতুন শব্দ ডেটাবেসে যোগ করার জন্য
 addwordform.addEventListener('submit', async (e) => {
@@ -17,13 +41,14 @@ addwordform.addEventListener('submit', async (e) => {
     const originalWord = originalWordInput.value;
     const synonym = synonymWordInput.value;
     const sentence = sentenceInput.value;
-console.log('Sending data:', originalWord, synonym, sentence); // এই লাইনটি এখানে যোগ করো
+
     try {
         await addDoc(collection(db, "words"), {
             originalWord: originalWord,
             synonym: synonym,
             sentence: sentence
         });
+
         addwordform.reset();
         console.log("Word successfully added!");
     } catch (e) {
@@ -31,24 +56,25 @@ console.log('Sending data:', originalWord, synonym, sentence); // এই লা�
     }
 });
 
-// ডেটাবেস থেকে শব্দগুলো real-time এ দেখানো
+// Firebase থেকে রিয়েল-টাইম ডেটা লোড করা এবং সার্চ ফাংশন
 onSnapshot(collection(db, "words"), (snapshot) => {
-    wordListContainer.innerHTML = '';
-    snapshot.forEach((doc) => {
-        const wordData = doc.data();
-        // এখানে তোমার ডিজাইন অনুযায়ী ব্লক তৈরি করো
-        const card = `
-            <div class="project-card">
-                <div class="project-image">
-                    <i class="fas fa-book-open"></i>
-                </div>
-                <div class="project-content">
-                    <h3>${wordData.originalWord}</h3>
-                    <p>${wordData.synonym}</p>
-                    <p><i>"${wordData.sentence}"</i></p>
-                </div>
-            </div>
-        `;
-        wordListContainer.innerHTML += card;
-    });
+    const allWords = snapshot.docs.map(doc => doc.data());
+    let filteredWords = allWords;
+
+    // সার্চ ইনপুট থাকলে ফিল্টার করা
+    const searchTerm = searchInput.value.toLowerCase();
+    if (searchTerm) {
+        filteredWords = allWords.filter(word => 
+            word.originalWord.toLowerCase().includes(searchTerm) ||
+            word.synonym.toLowerCase().includes(searchTerm) ||
+            word.sentence.toLowerCase().includes(searchTerm)
+        );
+    }
+
+    renderVocabularyList(filteredWords);
+});
+
+// সার্চ ইনপুটের জন্য ইভেন্ট লিসেনার
+searchInput.addEventListener('input', () => {
+    // onSnapshot লিসেনার স্বয়ংক্রিয়ভাবে ডেটা ফিল্টার করে রেন্ডার করবে
 });
