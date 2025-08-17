@@ -44,10 +44,12 @@ addwordform.addEventListener('submit', async (e) => {
     const sentence = sentenceInput.value;
 
     try {
-        await addDoc(collection(db, "words"), {
-            originalWord: originalWord,
-            synonym: synonym,
-            sentence: sentence
+        const timestamp = new Date(); 
+    await addDoc(collection(db, "words"), {
+        originalWord: originalWord,
+        synonym: synonym,
+        sentence: sentence,
+        createdAt: timestamp 
         });
 
         addwordform.reset();
