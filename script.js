@@ -1,5 +1,5 @@
 import { db } from './firebase-config.js';
-import { collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+import { collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
 // HTML এলিমেন্টগুলো সিলেক্ট করা
 const addwordform = document.getElementById('addwordform');
