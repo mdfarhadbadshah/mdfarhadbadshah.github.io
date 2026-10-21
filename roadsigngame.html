@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="bn" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TAKWA DRIVING SCHOOL - BRTA & International Traffic Sign Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 500: '#10b981', 600: '#059669' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .custom-glass {
+            backdrop-filter: blur(12px);
+        }
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.9; }
+        }
+        .animate-target {
+            animation: pulse-slow 1.8s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col justify-between transition-colors duration-300 overflow-x-hidden">
+
+    <!-- Compact Mobile Header -->
+    <header class="w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 py-1 px-2 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-1">
+            <div class="flex items-center gap-1.5 min-w-0">
+                <div class="w-6 h-6 rounded-md bg-red-600/10 dark:bg-red-600/20 border border-red-500/30 flex items-center justify-center text-red-600 dark:text-red-500 font-bold text-xs shrink-0">
+                    ⚠️
+                </div>
+                <div class="truncate">
+                    <h1 class="text-[11px] sm:text-xs font-black tracking-tight text-yellow-600 dark:text-yellow-400 leading-tight truncate">TAKWA DRIVING SCHOOL</h1>
+                    <div class="text-[9px] text-slate-500 dark:text-slate-400 leading-none truncate">
+                        <span>আন্তর্জাতিক ও বিআরটিএ লার্নিং</span> • <a href="https://mdfarhadbadshah.github.io/" target="_blank" rel="noopener noreferrer" class="underline hover:text-yellow-500 font-bold text-emerald-600 dark:text-emerald-400" id="devCreditHeader">Md Farhad Badshah</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-1 shrink-0">
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="px-1.5 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[10px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1 shadow-sm">
+                    <svg id="sunIcon" class="w-3 h-3 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg id="moonIcon" class="w-3 h-3 hidden text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <span id="themeLabel">লাইট</span>
+                </button>
+
+                <button id="langToggleBtn" onclick="toggleLanguage()" class="px-1.5 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[10px] font-bold text-emerald-700 dark:text-yellow-400 flex items-center gap-0.5 shadow-sm">
+                    <span>🌐</span>
+                    <span id="langLabel">বাংলা</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Score and Lives Bar -->
+    <div class="sticky top-[35px] z-30 w-full bg-slate-200/90 dark:bg-slate-900/90 border-b border-slate-300 dark:border-slate-800 py-1 px-2 backdrop-blur-sm shadow-sm">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-1.5 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-300 dark:border-slate-700">
+                <span id="livesLabel" class="text-[10px] uppercase text-slate-600 dark:text-slate-400 font-bold">লাইফ:</span>
+                <div id="livesContainer" class="flex gap-0.5 text-xs"></div>
+            </div>
+            <div class="flex items-center gap-1.5 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-300 dark:border-slate-700">
+                <span id="scoreLabel" class="text-[10px] uppercase text-slate-600 dark:text-slate-400 font-bold">পয়েন্ট:</span>
+                <span id="scoreText" class="text-xs font-black text-emerald-600 dark:text-emerald-400 font-mono">0.00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Target Sign Display Section -->
+    <section id="questionBar" class="sticky top-[63px] z-30 w-full bg-emerald-800/95 border-b border-emerald-500/40 py-1 px-2 backdrop-blur-md shadow-md">
+        <div class="max-w-4xl mx-auto flex items-center justify-center gap-1.5 text-center">
+            <span id="promptInstruction" class="text-emerald-100 text-[11px] font-semibold">নিচের চিহ্নে দ্রুত ক্লিক করুন:</span>
+            <div class="animate-target inline-flex items-center gap-1 bg-yellow-400 border border-yellow-300 px-2.5 py-0.5 rounded-full text-slate-950 font-black text-xs shadow">
+                <span id="currentTargetText">গেম শুরু করুন</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Canvas Play Area (ALWAYS BLACK/DARK MODE) -->
+    <main class="relative h-[68vh] sm:h-[500px] w-full max-w-4xl mx-auto my-0.5 rounded-lg overflow-hidden border border-slate-800 shadow-lg bg-slate-950 transition-colors" id="canvasContainer">
+        <canvas id="gameCanvas" class="w-full h-full block cursor-pointer"></canvas>
+
+        <!-- Start Overlay -->
+        <div id="startOverlay" class="absolute inset-0 custom-glass bg-slate-950/85 flex flex-col items-center justify-center p-3 z-30 text-center">
+            <div class="max-w-xs w-full bg-slate-900 border border-slate-700 rounded-xl p-4 shadow-2xl">
+                <div class="w-10 h-10 bg-yellow-500/20 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-2 border border-yellow-500/40">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h2 id="modeSelectTitle" class="text-base font-bold text-white mb-2">গেম মোড নির্বাচন করুন</h2>
+
+                <div class="space-y-1.5 mb-2">
+                    <button onclick="startGame('easy')" class="w-full group bg-slate-800 hover:bg-emerald-500/10 border border-emerald-500/30 p-2 rounded-lg transition flex items-center justify-between text-left">
+                        <div>
+                            <div id="easyTitle" class="text-xs font-bold text-emerald-400">সহজ (Easy - শেখার গতি)</div>
+                            <div id="easyDesc" class="text-[9px] text-slate-400">৩টি সুযোগ • আরামদায়ক গতি</div>
+                        </div>
+                        <span class="text-emerald-400 text-xs">→</span>
+                    </button>
+                    <button onclick="startGame('normal')" class="w-full group bg-slate-800 hover:bg-yellow-500/10 border border-yellow-500/30 p-2 rounded-lg transition flex items-center justify-between text-left">
+                        <div>
+                            <div id="normalTitle" class="text-xs font-bold text-yellow-400">সাধারণ (Normal)</div>
+                            <div id="normalDesc" class="text-[9px] text-slate-400">২টি সুযোগ • মাঝারি গতি</div>
+                        </div>
+                        <span class="text-yellow-400 text-xs">→</span>
+                    </button>
+                    <button onclick="startGame('hard')" class="w-full group bg-slate-800 hover:bg-red-500/10 border border-red-500/30 p-2 rounded-lg transition flex items-center justify-between text-left">
+                        <div>
+                            <div id="hardTitle" class="text-xs font-bold text-red-400">কঠিন (Hard - ফুল স্পিড)</div>
+                            <div id="hardDesc" class="text-[9px] text-slate-400">১টি সুযোগ • এক্সপার্ট চ্যালেঞ্জ</div>
+                        </div>
+                        <span class="text-red-400 text-xs">→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Overlay -->
+        <div id="gameOverOverlay" class="hidden absolute inset-0 custom-glass bg-slate-950/85 flex flex-col items-center justify-center p-3 z-30 text-center">
+            <div class="max-w-xs w-full bg-slate-900 border border-red-500/40 rounded-xl p-4 shadow-2xl">
+                <div class="w-10 h-10 bg-red-500/20 text-red-500 rounded-full flex items-center justify-center mx-auto mb-2 border border-red-500/40">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </div>
+                <h2 id="gameOverTitle" class="text-xl font-black text-red-500 mb-0.5">গেম ওভার!</h2>
+                <p id="gameOverSub" class="text-slate-400 text-[10px] mb-3">আপনার সুযোগ শেষ হয়ে গেছে।</p>
+
+                <div class="bg-slate-800 rounded-lg p-2.5 mb-3 border border-slate-700">
+                    <div id="scoreStatHeading" class="text-[9px] text-slate-400 uppercase font-semibold mb-0.5">অর্জিত মোট পয়েন্ট</div>
+                    <div id="finalScore" class="text-2xl font-black text-yellow-400 font-mono">0.00</div>
+                    <div id="finalAccuracy" class="text-[10px] text-slate-400 mt-0.5">সঠিক ক্লিক: 0 | ভুল ক্লিক: 0</div>
+                </div>
+
+                <div class="flex gap-1.5">
+                    <button id="levelChangeBtn" onclick="showStartScreen()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2 px-2 rounded-lg transition text-xs border border-slate-700">
+                        লেভেল চেঞ্জ
+                    </button>
+                    <button id="restartBtn" onclick="restartGame()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-2 rounded-lg shadow-lg transition text-xs">
+                        পুনরায় শুরু করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sign Directory Section -->
+    <section id="signDirectorySection" class="w-full max-w-4xl mx-auto my-3 px-2 mb-10">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 shadow-md">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-3 border-b border-slate-200 dark:border-slate-800 pb-2">
+                <div>
+                    <h2 id="dirTitle" class="text-xs sm:text-sm font-bold text-yellow-600 dark:text-yellow-400 flex items-center gap-1">
+                        <span>📚</span> আন্তর্জাতিক ও বিআরটিএ (BRTA) সম্পূর্ণ সংকেত ডিরেক্টরি (৫০+ সাইন)
+                    </h2>
+                    <p id="dirSubTitle" class="text-[10px] text-slate-500 dark:text-slate-400">ইউরোপীয়, আমেরিকান ও বিআরটিএ ম্যানুয়াল সংকলন</p>
+                </div>
+                
+                <div class="flex flex-wrap gap-1" id="filterBtnGroup">
+                    <button onclick="filterSigns('all')" class="sign-filter-btn px-2 py-0.5 rounded-md text-[10px] font-semibold bg-yellow-500 text-slate-950 transition" data-cat="all">সব সাইন</button>
+                    <button onclick="filterSigns('mandatory_no')" class="sign-filter-btn px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 transition" data-cat="mandatory_no">বাধ্যতামূলক না-বাচক</button>
+                    <button onclick="filterSigns('mandatory_yes')" class="sign-filter-btn px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 transition" data-cat="mandatory_yes">বাধ্যতামূলক হ্যাঁ-বাচক</button>
+                    <button onclick="filterSigns('warning')" class="sign-filter-btn px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 transition" data-cat="warning">সতর্কতামূলক</button>
+                    <button onclick="filterSigns('info')" class="sign-filter-btn px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 transition" data-cat="info">তথ্যমূলক ও অগ্রাধিকার</button>
+                </div>
+            </div>
+
+            <div id="signCardsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                <!-- Dynamically populated directory cards -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="mainFooter" class="w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-3 px-2 text-center text-[10px] text-slate-500 dark:text-slate-400 z-20 transition-colors">
+        <span>© 2026 TAKWA DRIVING SCHOOL. Created by <a href="https://mdfarhadbadshah.github.io/" target="_blank" id="devCreditFooter" class="text-yellow-600 dark:text-yellow-400 font-bold hover:underline">Md Farhad Badshah</a>. All rights reserved.</span>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // Comprehensive Dataset featuring 50+ European, American & BRTA Traffic Signs
+        const ALL_GAME_SIGNS = [
+            // Priority & Special Info Signs
+            { id: 'priority_road', name: 'অগ্রাধিকার প্রাপ্ত রাস্তা', nameEn: 'Priority Road', category: 'info', desc: 'এই রাস্তায় চলাচলকারী যানবাহনের অগ্রাধিকার রয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 3;
+                ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI / 4);
+                ctx.fillRect(-r * 0.85, -r * 0.85, r * 1.7, r * 1.7);
+                ctx.fillStyle = '#fbbf24'; ctx.fillRect(-r * 0.6, -r * 0.6, r * 1.2, r * 1.2);
+                ctx.restore();
+            }},
+            { id: 'end_priority_road', name: 'অগ্রাধিকার রাস্তার শেষ', nameEn: 'End of Priority Road', category: 'info', desc: 'অগ্রাধিকার সড়কের সমাপ্তি নির্দেশ করে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI / 4);
+                ctx.fillRect(-r * 0.85, -r * 0.85, r * 1.7, r * 1.7);
+                ctx.fillStyle = '#fbbf24'; ctx.fillRect(-r * 0.6, -r * 0.6, r * 1.2, r * 1.2);
+                ctx.strokeStyle = '#000000'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(-r * 0.85, -r * 0.85); ctx.lineTo(r * 0.85, r * 0.85); ctx.stroke();
+                ctx.restore();
+            }},
+            { id: 'priority_over_oncoming', name: 'সম্মুখের গাড়ির ওপর অগ্রাধিকার', nameEn: 'Priority Over Oncoming Traffic', category: 'info', desc: 'বিপরীত দিক থেকে আসা গাড়ির চেয়ে আপনার অগ্রাধিকার আছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#2563eb'; ctx.beginPath(); ctx.arc(x, y, r * 1.15, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#ffffff'; ctx.font = `${Math.round(r * 1.0)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('⬆️', x - r * 0.3, y);
+                ctx.fillStyle = '#ef4444'; ctx.font = `${Math.round(r * 0.8)}px sans-serif`; ctx.fillText('⬇️', x + r * 0.3, y);
+            }},
+            { id: 'give_way_oncoming', name: 'সম্মুখের গাড়িকে অগ্রাধিকার দিন', nameEn: 'Give Way to Oncoming Traffic', category: 'mandatory_no', desc: 'সামনে থেকে আসা গাড়িকে আগে যেতে দিন।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#ef4444'; ctx.font = `${Math.round(r * 1.0)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('⬆️', x - r * 0.3, y);
+                ctx.fillStyle = '#2563eb'; ctx.font = `${Math.round(r * 0.8)}px sans-serif`; ctx.fillText('⬇️', x + r * 0.3, y);
+            }},
+
+            // Warning / Hazard Signs (Triangles)
+            { id: 'traffic_signals_ahead', name: 'সামনে ট্রাফিক সিগন্যাল', nameEn: 'Traffic Signals Ahead', category: 'warning', desc: 'সামনে ট্রাফিক লাইট রয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                // Traffic light circles inside
+                ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(x, y - r * 0.25, r * 0.22, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#f59e0b'; ctx.beginPath(); ctx.arc(x, y + r * 0.15, r * 0.22, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#10b981'; ctx.beginPath(); ctx.arc(x, y + r * 0.55, r * 0.22, 0, Math.PI * 2); ctx.fill();
+            }},
+            { id: 'roundabout_ahead', name: 'সামনে গোলচত্বর', nameEn: 'Roundabout Ahead', category: 'warning', desc: 'সামনে ট্রাফিক গোলচত্বর রয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.arc(x, y + r * 0.15, r * 0.35, 0, Math.PI * 2); ctx.stroke();
+            }},
+            { id: 'two_way_traffic', name: 'দ্বিমুখী ট্রাফিক চলাচল', nameEn: 'Two-Way Traffic Ahead', category: 'warning', desc: 'সামনে উভয়মুখী যাতায়াতের রাস্তা শুরু হয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `${Math.round(r * 0.8)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('↕️', x, y + r * 0.15);
+            }},
+            { id: 'traffic_queues', name: 'যানজটের সম্ভাবনা', nameEn: 'Traffic Queues Likely', category: 'warning', desc: 'সামনে গাড়ির দীর্ঘ লাইন বা যানজট থাকতে পারে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `${Math.round(r * 0.8)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🚗🚗', x, y + r * 0.15);
+            }},
+            { id: 'road_narrows_both', name: 'উভয় পার্শ্বে রাস্তা সংকীর্ণ', nameEn: 'Road Narrows on Both Sides', category: 'warning', desc: 'সামনে রাস্তা উভয় দিক থেকে সংকুচিত হয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 4; ctx.beginPath();
+                ctx.moveTo(x - r * 0.5, y - r * 0.2); ctx.lineTo(x - r * 0.1, y + r * 0.5);
+                ctx.moveTo(x + r * 0.5, y - r * 0.2); ctx.lineTo(x + r * 0.1, y + r * 0.5);
+                ctx.stroke();
+            }},
+            { id: 'road_narrows_right', name: 'ডান দিকে রাস্তা সংকীর্ণ', nameEn: 'Road Narrows on Right', category: 'warning', desc: 'সামনে ডান দিক থেকে রাস্তা সংকুচিত হয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 4; ctx.beginPath();
+                ctx.moveTo(x - r * 0.2, y - r * 0.2); ctx.lineTo(x - r * 0.2, y + r * 0.5);
+                ctx.moveTo(x + r * 0.4, y - r * 0.2); ctx.lineTo(x, y + r * 0.5);
+                ctx.stroke();
+            }},
+            { id: 'steep_descent', name: 'প্রবল ঢালু উতরাই', nameEn: 'Steep Descent', category: 'warning', desc: 'সামনে পাহাড়ি বা তীব্র নিচের দিকে ঢাল রাস্তা।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#000000'; ctx.font = `900 ${Math.round(r * 0.55)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('10%', x, y + r * 0.2);
+            }},
+            { id: 'steep_ascent', name: 'তীব্র চড়াই উতরাই', nameEn: 'Steep Ascent', category: 'warning', desc: 'সামনে পাহাড়ি বা তীব্র ওপরের দিকে চড়াই রাস্তা।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#000000'; ctx.font = `900 ${Math.round(r * 0.55)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('10%', x, y + r * 0.2);
+            }},
+            { id: 'road_bump', name: 'সামনে গতিরোধক (স্পিড ব্রেকার)', nameEn: 'Road Bump Ahead', category: 'warning', desc: 'সামনে স্পিড ব্রেকার রয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = '#000000'; ctx.lineWidth = 4; ctx.beginPath();
+                ctx.arc(x, y + r * 0.3, r * 0.5, Math.PI, 0, false); ctx.stroke();
+            }},
+            { id: 'uneven_road', name: 'অসমান রাস্তা', nameEn: 'Uneven Road', category: 'warning', desc: 'সামনে রাস্তা উঁচু-নিচু ও এব্রোথেব্রো।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = '#000000'; ctx.lineWidth = 4; ctx.beginPath();
+                ctx.moveTo(x - r * 0.6, y + r * 0.3);
+                ctx.lineTo(x - r * 0.2, y);
+                ctx.lineTo(x + r * 0.2, y + r * 0.3);
+                ctx.lineTo(x + r * 0.6, y);
+                ctx.stroke();
+            }},
+            { id: 'curve', name: 'সামনে বাঁক', nameEn: 'Curve Ahead', category: 'warning', desc: 'সামনে রাস্তার বাঁক রয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = '#000000'; ctx.lineWidth = 4; ctx.beginPath();
+                ctx.arc(x + r * 0.3, y, r * 0.4, Math.PI * 0.5, Math.PI * 1.5, false); ctx.stroke();
+            }},
+            { id: 'double_curve', name: 'জিগজ্যাগ বা দ্বৈত বাঁক', nameEn: 'Double Curve', category: 'warning', desc: 'সামনে ডাবল বা সাপের মতো বাঁক রয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.strokeStyle = '#000000'; ctx.lineWidth = 4; ctx.beginPath();
+                ctx.moveTo(x - r * 0.4, y + r * 0.5);
+                ctx.lineTo(x + r * 0.3, y + r * 0.1);
+                ctx.lineTo(x - r * 0.3, y - r * 0.2);
+                ctx.lineTo(x + r * 0.3, y - r * 0.6);
+                ctx.stroke();
+            }},
+
+            // Standard BRTA & International Mandatory/Prohibitory Signs
+            { id: 'stop_sign', name: 'থামুন এবং আগে যেতে দিন', nameEn: 'Stop and Give Way', category: 'mandatory_no', desc: 'নির্ধারিত রেখায় সম্পূর্ণ থামুন।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#dc2626'; ctx.beginPath();
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i * Math.PI) / 4 - Math.PI / 8;
+                    const nx = x + r * 1.15 * Math.cos(angle), ny = y + r * 1.15 * Math.sin(angle);
+                    if (i === 0) ctx.moveTo(nx, ny); else ctx.lineTo(nx, ny);
+                }
+                ctx.closePath(); ctx.fill();
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 3; ctx.stroke();
+                ctx.fillStyle = '#ffffff'; ctx.font = `900 ${Math.round(r * 0.75)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('STOP', x, y);
+            }},
+            { id: 'give_way', name: 'আগে যেতে দিন', nameEn: 'Give Way', category: 'mandatory_no', desc: 'অন্যান্য যানবাহনকে অগ্রাধিকার দিন।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.1); ctx.lineTo(x + r * 1.15, y + r * 0.95); ctx.lineTo(x - r * 1.15, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+            }},
+            { id: 'no_entry', name: 'যানবাহন প্রবেশ নিষেধ', nameEn: 'No Entry', category: 'mandatory_no', desc: 'সব ধরণের যানবাহনের জন্য প্রবেশ নিষিদ্ধ।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#dc2626'; ctx.beginPath(); ctx.arc(x, y, r * 1.15, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(x - r * 0.85, y - r * 0.25, r * 1.7, r * 0.5);
+            }},
+            { id: 'road_closed', name: 'রাস্তা বন্ধ', nameEn: 'Road Closed', category: 'mandatory_no', desc: 'সামনের রাস্তা সম্পূর্ণ বন্ধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#dc2626'; ctx.beginPath(); ctx.arc(x, y, r * 0.9, 0, Math.PI * 2); ctx.fill();
+            }},
+            { id: 'no_motor_vehicles', name: 'মোটরযান চলাচল নিষেধ', nameEn: 'No Motor Vehicles', category: 'mandatory_no', desc: 'মোটরচালিত গাড়ির প্রবেশ নিষেধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#1e293b'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🚗', x, y);
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+            { id: 'no_truck', name: 'ট্রাক চলাচল নিষেধ', nameEn: 'No Trucks', category: 'mandatory_no', desc: 'ভারী ট্রাকের চলাচল নিষিদ্ধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#1e293b'; ctx.font = `${Math.round(r * 1.0)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🚚', x, y);
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+            { id: 'no_pedestrian', name: 'পথচারী চলাচল নিষেধ', nameEn: 'No Pedestrians', category: 'mandatory_no', desc: 'এই পথে পায়ে হেঁটে চলাচল নিষেধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#1e293b'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🚶', x, y);
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+            { id: 'no_bicycle', name: 'সাইকেল চলাচল নিষেধ', nameEn: 'No Bicycles', category: 'mandatory_no', desc: 'সাইকেল চালানো নিষেধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#1e293b'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🚲', x, y);
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+            { id: 'no_left_turn', name: 'বামে মোড় নিষেধ', nameEn: 'No Left Turn', category: 'mandatory_no', desc: 'বামে মোড় নেওয়া নিষিদ্ধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x + r * 0.35, y + r * 0.6); ctx.lineTo(x + r * 0.35, y - r * 0.2); ctx.lineTo(x - r * 0.45, y - r * 0.2); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.moveTo(x - r * 0.65, y - r * 0.2); ctx.lineTo(x - r * 0.3, y - r * 0.45); ctx.lineTo(x - r * 0.3, y + r * 0.05); ctx.closePath(); ctx.fill();
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+            { id: 'no_right_turn', name: 'ডানে মোড় নিষেধ', nameEn: 'No Right Turn', category: 'mandatory_no', desc: 'ডান দিকে মোড় নেওয়া নিষিদ্ধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.35, y + r * 0.6); ctx.lineTo(x - r * 0.35, y - r * 0.2); ctx.lineTo(x + r * 0.45, y - r * 0.2); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.moveTo(x + r * 0.65, y - r * 0.2); ctx.lineTo(x + r * 0.3, y - r * 0.45); ctx.lineTo(x + r * 0.3, y + r * 0.05); ctx.closePath(); ctx.fill();
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+            { id: 'no_u_turn', name: 'ইউ টার্ন নিষেধ', nameEn: 'No U-Turns', category: 'mandatory_no', desc: 'গাড়ি ঘুরিয়ে বিপরীত দিকে যাওয়া নিষেধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.strokeStyle = '#0f172a'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x + r * 0.1, y - r * 0.1, r * 0.4, Math.PI, 0, false); ctx.lineTo(x + r * 0.5, y + r * 0.5); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.moveTo(x - r * 0.3, y + r * 0.05); ctx.lineTo(x - r * 0.6, y - r * 0.25); ctx.lineTo(x, y - r * 0.25); ctx.closePath(); ctx.fill();
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+            { id: 'speed_limit_30', name: 'সর্বোচ্চ গতিসীমা ৩০', nameEn: 'Maximum Speed Limit 30', category: 'mandatory_no', desc: 'সর্বোচ্চ ৩০ কিমি গতিতে চলুন।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `900 ${Math.round(r * 1.15)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('30', x, y);
+            }},
+            { id: 'maximum_height', name: 'সর্বোচ্চ উচ্চতা সীমাবদ্ধতা', nameEn: 'Maximum Height Limit', category: 'mandatory_no', desc: 'এর অধিক উচ্চতার গাড়ি প্রবেশ নিষেধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `900 ${Math.round(r * 0.55)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('3.5m', x, y);
+            }},
+            { id: 'maximum_width', name: 'সর্বোচ্চ প্রস্থ সীমাবদ্ধতা', nameEn: 'Maximum Width Limit', category: 'mandatory_no', desc: 'এর অধিক চওড়া গাড়ি নিষেধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `900 ${Math.round(r * 0.55)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('2.5m', x, y);
+            }},
+            { id: 'no_parking', name: 'পার্কিং নিষেধ', nameEn: 'No Parking', category: 'mandatory_no', desc: 'গাড়ি পার্ক করা নিষেধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#2563eb'; ctx.font = `900 ${Math.round(r * 1.3)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('P', x, y);
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+            { id: 'no_stopping', name: 'থামানো নিষেধ', nameEn: 'No Stopping', category: 'mandatory_no', desc: 'গাড়ি ক্ষণিকের জন্যও থামানো নিষেধ।', render: (ctx, x, y, r) => {
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#2563eb'; ctx.beginPath(); ctx.arc(x, y, r * 1.1, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4.5; 
+                ctx.beginPath(); ctx.moveTo(x - r * 0.8, y - r * 0.8); ctx.lineTo(x + r * 0.8, y + r * 0.8); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(x + r * 0.8, y - r * 0.8); ctx.lineTo(x - r * 0.8, y + r * 0.8); ctx.stroke();
+            }},
+
+            // Mandatory Yes Signs (Blue circles)
+            { id: 'proceed_straight', name: 'শুধু সামনে চলুন', nameEn: 'Proceed Straight', category: 'mandatory_yes', desc: 'বাধ্যতামূলকভাবে সোজা চলুন।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#2563eb'; ctx.beginPath(); ctx.arc(x, y, r * 1.15, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x, y + r * 0.75); ctx.lineTo(x, y - r * 0.65); ctx.stroke();
+                ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(x, y - r * 0.95); ctx.lineTo(x - r * 0.4, y - r * 0.4); ctx.lineTo(x + r * 0.4, y - r * 0.4); ctx.closePath(); ctx.fill();
+            }},
+            { id: 'turn_right', name: 'ডানে মোড় নিন', nameEn: 'Turn Right', category: 'mandatory_yes', desc: 'বাধ্যতামূলক ডানে মোড়।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#2563eb'; ctx.beginPath(); ctx.arc(x, y, r * 1.15, 0, Math.PI * 2); ctx.fill();
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x - r * 0.4, y + r * 0.6); ctx.lineTo(x + r * 0.2, y + r * 0.6); ctx.lineTo(x + r * 0.2, y - r * 0.2); ctx.stroke();
+                ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.moveTo(x + r * 0.6, y + r * 0.6); ctx.lineTo(x + r * 0.15, y + r * 0.3); ctx.lineTo(x + r * 0.15, y + r * 0.9); ctx.closePath(); ctx.fill();
+            }},
+            { id: 'turn_right_ahead', name: 'সামনে ডানে মোড়', nameEn: 'Turn Right Ahead', category: 'mandatory_yes', desc: 'সামনে ডানে ঘুরতে হবে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#2563eb'; ctx.beginPath(); ctx.arc(x, y, r * 1.15, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#ffffff'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('↪️', x, y);
+            }},
+            { id: 'proceed_straight_or_right', name: 'সামনে অথবা ডানে চলুন', nameEn: 'Proceed Straight or Turn Right', category: 'mandatory_yes', desc: 'সোজা অথবা ডানে যাওয়ার নির্দেশনা।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#2563eb'; ctx.beginPath(); ctx.arc(x, y, r * 1.15, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = '#ffffff'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('⤴️', x, y);
+            }},
+
+            // Additional Warnings & Hazards
+            { id: 'pedestrian_crossing', name: 'পথচারী পারাপার', nameEn: 'Pedestrian Crossing', category: 'warning', desc: 'জেব্রা ক্রসিং ও পথচারী পারাপার এলাকা।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🚶', x, y + r * 0.1);
+            }},
+            { id: 'school_zone', name: 'স্কুল এলাকা', nameEn: 'School Zone', category: 'warning', desc: 'স্কুল জোন, সাবধানে গাড়ি চালান।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🏫', x, y + r * 0.1);
+            }},
+            { id: 'road_works', name: 'রাস্তার কাজ চলছে', nameEn: 'Road Works', category: 'warning', desc: 'সামনে রাস্তা নির্মাণের কাজ চলছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🚧', x, y + r * 0.1);
+            }},
+            { id: 'falling_rocks', name: 'পাথর খসে পড়ার ভয়', nameEn: 'Falling Rocks', category: 'warning', desc: 'পাহাড়ে পাথর পড়ার সম্ভাবনা রয়েছে।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('🪨', x, y + r * 0.1);
+            }},
+            { id: 'slippery_road', name: 'পিচ্ছিল রাস্তা', nameEn: 'Slippery Road', category: 'warning', desc: 'সতর্ক থাকুন, রাস্তা পিচ্ছিল।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(x, y - r * 1.15); ctx.lineTo(x + r * 1.2, y + r * 0.95); ctx.lineTo(x - r * 1.2, y + r * 0.95); ctx.closePath(); ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#0f172a'; ctx.font = `${Math.round(r * 1.1)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('💧', x, y + r * 0.1);
+            }},
+
+            // Info Signs
+            { id: 'parking_place', name: 'পার্কিং জোন', nameEn: 'Parking Place', category: 'info', desc: 'গাড়ি পার্ক করার নির্ধারিত স্থান।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#2563eb'; ctx.fillRect(x - r * 1.0, y - r * 1.0, r * 2.0, r * 2.0);
+                ctx.fillStyle = '#ffffff'; ctx.font = `900 ${Math.round(r * 1.4)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('P', x, y);
+            }},
+            { id: 'filling_station', name: 'ফিলিং স্টেশন', nameEn: 'Filling Station', category: 'info', desc: 'জ্বালানি বা গ্যাস পাম্প।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#2563eb'; ctx.fillRect(x - r * 1.0, y - r * 1.0, r * 2.0, r * 2.0);
+                ctx.fillStyle = '#ffffff'; ctx.font = `${Math.round(r * 1.2)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('⛽', x, y);
+            }},
+            { id: 'hospital', name: 'হাসপাতাল', nameEn: 'Hospital', category: 'info', desc: 'হাসপাতাল ও চিকিৎসাকেন্দ্র।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(x - r * 1.0, y - r * 1.0, r * 2.0, r * 2.0);
+                ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2; ctx.strokeRect(x - r * 1.0, y - r * 1.0, r * 2.0, r * 2.0);
+                ctx.fillStyle = '#dc2626';
+                const w = r * 0.45, h = r * 1.4;
+                ctx.fillRect(x - w / 2, y - h / 2, w, h);
+                ctx.fillRect(x - h / 2, y - w / 2, h, w);
+            }},
+            { id: 'police_station', name: 'পুলিশ থানা', nameEn: 'Police Station', category: 'info', desc: 'পুলিশ থানা বা ক্যাম্প।', render: (ctx, x, y, r) => {
+                ctx.fillStyle = '#2563eb'; ctx.fillRect(x - r * 1.0, y - r * 1.0, r * 2.0, r * 2.0);
+                ctx.fillStyle = '#ffffff'; ctx.font = `900 ${Math.round(r * 0.55)}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('POLICE', x, y);
+            }}
+        ];
+
+        let currentLang = 'bn';
+        function toggleLanguage() {
+            currentLang = currentLang === 'bn' ? 'en' : 'bn';
+            document.getElementById('langLabel').innerText = currentLang === 'bn' ? 'বাংলা' : 'English';
+            updateStaticTexts();
+            updateThemeLabel();
+            if (targetSign) {
+                document.getElementById('currentTargetText').innerText = currentLang === 'bn' ? targetSign.name : targetSign.nameEn;
+            }
+        }
+
+        function updateStaticTexts() {
+            const t = {
+                bn: { lives: 'লাইফ:', score: 'পয়েন্ট:', prompt: 'নিচের চিহ্নে দ্রুত ক্লিক করুন:', modeTitle: 'গেম মোড নির্বাচন করুন', easyTitle: 'সহজ (Easy - শেখার গতি)', easyDesc: '৩টি সুযোগ • আরামদায়ক গতি', normalTitle: 'সাধারণ (Normal)', normalDesc: '২টি সুযোগ • মাঝারি গতি', hardTitle: 'কঠিন (Hard - ফুল স্পিড)', hardDesc: '১টি সুযোগ • এক্সপার্ট চ্যালেঞ্জ', goText: 'গেম শুরু করুন', overTitle: 'গেম ওভার!', overSub: 'আপনার সুযোগ শেষ হয়ে গেছে।', statHead: 'অর্জিত মোট পয়েন্ট', chgBtn: 'লেভেল চেঞ্জ', restartBtn: 'পুনরায় শুরু করুন', dirTitle: 'আন্তর্জাতিক ও বিআরটিএ সম্পূর্ণ সংকেত ডিরেক্টরি (৫০+ সাইন)', dirSub: 'ইউরোপীয়, আমেরিকান ও বিআরটিএ ম্যানুয়াল সংকলন' },
+                en: { lives: 'Lives:', score: 'Score:', prompt: 'Click rapidly on the matching sign:', modeTitle: 'Select Game Mode', easyTitle: 'Easy (Learning Speed)', easyDesc: '3 Lives • Gentle falling speed', normalTitle: 'Normal', normalDesc: '2 Lives • Balanced speed', hardTitle: 'Hard (Full Speed)', hardDesc: '1 Life • Expert challenge', goText: 'Start Game', overTitle: 'Game Over!', overSub: 'You ran out of lives.', statHead: 'Total Score Earned', chgBtn: 'Change Level', restartBtn: 'Play Again', dirTitle: 'International & BRTA Complete Sign Directory', dirSub: 'European, American & BRTA manuals compilation' }
+            };
+            const lang = t[currentLang];
+            document.getElementById('livesLabel').innerText = lang.lives;
+            document.getElementById('scoreLabel').innerText = lang.score;
+            document.getElementById('promptInstruction').innerText = lang.prompt;
+            document.getElementById('modeSelectTitle').innerText = lang.modeTitle;
+            document.getElementById('easyTitle').innerText = lang.easyTitle;
+            document.getElementById('easyDesc').innerText = lang.easyDesc;
+            document.getElementById('normalTitle').innerText = lang.normalTitle;
+            document.getElementById('normalDesc').innerText = lang.normalDesc;
+            document.getElementById('hardTitle').innerText = lang.hardTitle;
+            document.getElementById('hardDesc').innerText = lang.hardDesc;
+            document.getElementById('gameOverTitle').innerText = lang.overTitle;
+            document.getElementById('gameOverSub').innerText = lang.overSub;
+            document.getElementById('scoreStatHeading').innerText = lang.statHead;
+            document.getElementById('levelChangeBtn').innerText = lang.chgBtn;
+            document.getElementById('restartBtn').innerText = lang.restartBtn;
+            document.getElementById('dirTitle').innerHTML = `<span>📚</span> ${lang.dirTitle}`;
+            document.getElementById('dirSubTitle').innerText = lang.dirSub;
+        }
+
+        let isDarkMode = false;
+        function updateThemeLabel() {
+            const label = document.getElementById('themeLabel');
+            if (label) {
+                label.innerText = currentLang === 'bn' ? (isDarkMode ? 'ডার্ক' : 'লাইট') : (isDarkMode ? 'Dark' : 'Light');
+            }
+        }
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.documentElement.classList.toggle('dark', isDarkMode);
+            document.documentElement.classList.toggle('light', !isDarkMode);
+            document.getElementById('sunIcon').classList.toggle('hidden', isDarkMode);
+            document.getElementById('moonIcon').classList.toggle('hidden', !isDarkMode);
+            updateThemeLabel();
+            renderSignDirectoryCards(currentFilter);
+        }
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let gameState = 'START';
+        let score = 0;
+        let lives = 3;
+        let maxLives = 3;
+        let currentMode = 'easy';
+        let fallingSigns = [];
+        let targetSign = null;
+        let spawnInterval = null;
+        let animationFrameId = null;
+        let correctClicks = 0;
+        let wrongClicks = 0;
+        let currentFilter = 'all';
+
+        function resizeCanvas() {
+            const container = document.getElementById('canvasContainer');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function startGame(mode) {
+            currentMode = mode;
+            gameState = 'PLAYING';
+            score = 0;
+            correctClicks = 0;
+            wrongClicks = 0;
+            fallingSigns = [];
+
+            if (mode === 'easy') maxLives = 3;
+            else if (mode === 'normal') maxLives = 2;
+            else maxLives = 1;
+            
+            lives = maxLives;
+
+            document.getElementById('startOverlay').classList.add('hidden');
+            document.getElementById('gameOverOverlay').classList.add('hidden');
+
+            updateUIStats();
+            pickNewTarget();
+
+            if (spawnInterval) clearInterval(spawnInterval);
+            const intervalTime = mode === 'easy' ? 2400 : mode === 'normal' ? 1600 : 1000;
+            spawnInterval = setInterval(spawnRandomSign, intervalTime);
+
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            gameLoop();
+        }
+
+        function showStartScreen() {
+            gameState = 'START';
+            if (spawnInterval) clearInterval(spawnInterval);
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            document.getElementById('startOverlay').classList.remove('hidden');
+            document.getElementById('gameOverOverlay').classList.add('hidden');
+            document.getElementById('currentTargetText').innerText = currentLang === 'bn' ? 'গেম শুরু করুন' : 'Start Game';
+        }
+
+        function gameOver() {
+            gameState = 'GAMEOVER';
+            if (spawnInterval) clearInterval(spawnInterval);
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+            document.getElementById('finalScore').innerText = score.toFixed(2);
+            document.getElementById('finalAccuracy').innerText = currentLang === 'bn' ? 
+                `সঠিক ক্লিক: ${correctClicks} | ভুল ক্লিক: ${wrongClicks}` : 
+                `Correct: ${correctClicks} | Wrong: ${wrongClicks}`;
+            document.getElementById('gameOverOverlay').classList.remove('hidden');
+        }
+
+        function restartGame() {
+            startGame(currentMode);
+        }
+
+        function pickNewTarget() {
+            const randomIndex = Math.floor(Math.random() * ALL_GAME_SIGNS.length);
+            targetSign = ALL_GAME_SIGNS[randomIndex];
+            const nameToDisplay = currentLang === 'bn' ? targetSign.name : targetSign.nameEn;
+            document.getElementById('currentTargetText').innerText = nameToDisplay;
+
+            if (gameState === 'PLAYING') {
+                spawnSpecificSign(targetSign);
+            }
+        }
+
+        function spawnSpecificSign(signDef) {
+            const radius = 38;
+            const x = Math.random() * (canvas.width - radius * 2) + radius;
+            const y = -radius - 10;
+            const speed = currentMode === 'easy' ? 1.1 : currentMode === 'normal' ? 1.6 : 2.5;
+
+            fallingSigns.push({
+                def: signDef,
+                x: x,
+                y: y,
+                radius: radius,
+                speed: speed
+            });
+        }
+
+        function spawnRandomSign() {
+            if (gameState !== 'PLAYING') return;
+            const signDef = ALL_GAME_SIGNS[Math.floor(Math.random() * ALL_GAME_SIGNS.length)];
+            spawnSpecificSign(signDef);
+        }
+
+        function updateUIStats() {
+            let livesHtml = '';
+            for (let i = 0; i < maxLives; i++) {
+                livesHtml += i < lives ? '❤️' : '🖤';
+            }
+            document.getElementById('livesContainer').innerHTML = livesHtml;
+            document.getElementById('scoreText').innerText = score.toFixed(2);
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (gameState !== 'PLAYING') return;
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            for (let i = fallingSigns.length - 1; i >= 0; i--) {
+                const s = fallingSigns[i];
+                const dist = Math.hypot(clickX - s.x, clickY - s.y);
+                if (dist <= s.radius + 12) {
+                    if (s.def.id === targetSign.id) {
+                        score += currentMode === 'easy' ? 1.50 : currentMode === 'normal' ? 1.25 : 1.00;
+                        correctClicks++;
+                        fallingSigns.splice(i, 1);
+                        pickNewTarget();
+                    } else {
+                        lives--;
+                        wrongClicks++;
+                        fallingSigns.splice(i, 1);
+                        if (lives <= 0) {
+                            gameOver();
+                        }
+                    }
+                    break;
+                }
+            }
+            updateUIStats();
+        });
+
+        function gameLoop() {
+            if (gameState !== 'PLAYING') return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#090d16';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 32) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+
+            for (let i = fallingSigns.length - 1; i >= 0; i--) {
+                const s = fallingSigns[i];
+                s.y += s.speed;
+
+                ctx.save();
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+                ctx.shadowBlur = 10;
+                
+                if (s.def.category === 'info' && s.def.id !== 'hospital') {
+                    ctx.fillStyle = '#2563eb';
+                } else {
+                    ctx.fillStyle = '#ffffff';
+                }
+
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 3.5;
+                ctx.stroke();
+                ctx.restore();
+
+                if (typeof s.def.render === 'function') {
+                    s.def.render(ctx, s.x, s.y, s.radius * 0.85);
+                }
+
+                if (s.y - s.radius > canvas.height) {
+                    if (s.def.id === targetSign.id) {
+                        lives--;
+                        if (lives <= 0) {
+                            gameOver();
+                        }
+                    }
+                    fallingSigns.splice(i, 1);
+                    updateUIStats();
+                }
+            }
+
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function renderSignDirectoryCards(filter = 'all') {
+            currentFilter = filter;
+            const grid = document.getElementById('signCardsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' ? ALL_GAME_SIGNS : ALL_GAME_SIGNS.filter(s => s.category === filter);
+
+            filtered.forEach((sign, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/70 rounded-lg p-2 flex flex-col items-center text-center hover:border-yellow-500/50 transition shadow-sm";
+                
+                const canvasId = `card_canvas_${sign.id}_${idx}`;
+                const bgBoxClass = isDarkMode ? 'bg-slate-900 border-slate-700' : 'bg-slate-100 border-slate-300';
+                
+                card.innerHTML = `
+                    <div class="w-12 h-12 flex items-center justify-center mb-1 ${bgBoxClass} rounded-md p-1 border">
+                        <canvas id="${canvasId}" width="48" height="48"></canvas>
+                    </div>
+                    <div class="text-[10px] font-bold text-yellow-600 dark:text-yellow-300 line-clamp-1">${sign.name}</div>
+                    <div class="text-[8px] text-slate-500 dark:text-slate-400 mb-0.5">${sign.nameEn}</div>
+                    <p class="text-[9px] text-slate-600 dark:text-slate-300 leading-tight line-clamp-2">${sign.desc}</p>
+                `;
+                grid.appendChild(card);
+
+                setTimeout(() => {
+                    const cardCanvas = document.getElementById(canvasId);
+                    if (cardCanvas) {
+                        const cCtx = cardCanvas.getContext('2d');
+                        if (cCtx && typeof sign.render === 'function') {
+                            cCtx.fillStyle = isDarkMode ? '#1e293b' : '#ffffff';
+                            cCtx.beginPath();
+                            cCtx.arc(24, 24, 20, 0, Math.PI * 2);
+                            cCtx.fill();
+                            cCtx.strokeStyle = '#eab308';
+                            cCtx.lineWidth = 2.5;
+                            cCtx.stroke();
+
+                            sign.render(cCtx, 24, 24, 14);
+                        }
+                    }
+                }, 10);
+            });
+        }
+
+        function filterSigns(cat) {
+            document.querySelectorAll('.sign-filter-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "sign-filter-btn px-2 py-0.5 rounded-md text-[10px] font-semibold bg-yellow-500 text-slate-950 transition shadow";
+                } else {
+                    btn.className = "sign-filter-btn px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 transition";
+                }
+            });
+            renderSignDirectoryCards(cat);
+        }
+
+        window.onload = () => {
+            renderSignDirectoryCards('all');
+            showStartScreen();
+            updateThemeLabel();
+        };
+
+        setInterval(() => {
+            const creditHeader = document.getElementById('devCreditHeader');
+            const creditFooter = document.getElementById('devCreditFooter');
+            const isPreview = window.location.protocol === 'blob:' || window.location.href.includes('preview') || window.location.hostname.includes('googleusercontent');
+            
+            if (!isPreview) {
+                const headerValid = creditHeader && creditHeader.innerText.includes('Md Farhad Badshah');
+                const footerValid = creditFooter && creditFooter.innerText.includes('Md Farhad Badshah');
+                
+                if (!headerValid || !footerValid) {
+                    document.body.innerHTML = `<div style="display:flex;height:100vh;align-items:center;justify-content:center;background:#050505;color:#ef4444;font-family:sans-serif;text-align:center;padding:20px;">
+                        <div>
+                            <h1 style="font-size:24px;font-weight:bold;margin-bottom:10px;">⚠️ Security Lockout</h1>
+                            <p style="color:#94a3b8;font-size:13px;">ডেভেলপার ক্রেডিট (Md Farhad Badshah) অপরিবর্তিত রাখতে হবে।</p>
+                        </div>
+                    </div>`;
+                }
+            }
+        }, 2500);
+    </script>
+</body>
+</html>
